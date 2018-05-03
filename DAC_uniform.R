@@ -15,6 +15,7 @@
 library(blavaan)
 library(flexmix)
 library(sfsmisc)
+library(truncnorm)
 
 # Function definitions
 # Function to calculate the DAC for a 2 parameter model mean / sd. 
@@ -111,9 +112,16 @@ DAC.uniform <- function(from, to, by, data, priors, lb.bench, ub.bench, n.iter=1
     x.axis <- seq(from = from, to=to, by = by)
     
     # Specify posterior density 
-    post <- dtruncnorm(x.axis, a=lb.bench, b=ub.bench, output[1,3], output[1,4])
+    post <- dtruncnorm(x.axis, a=lb.bench, b=ub.bench, output.data[1,3], output.data[1,4])
     
     #density(hierdechainssamengevoegd, n = length( seq(from = from, to = to, by = by) ), from = from, to = to)
+    
+    # warning to check if posterior integrates to one
+    if(round(integrate.xy(x = seq(from = from,  to = to, by = by), fx = post), 2) != 1){
+      stop(paste0("The posterior distribution from the benchmark and the data is not propper in the sense that it does not integrate to one over
+           the defined parameter space. You can use the integrate.xy function of the sfsmisc package to check this. The posterior has a
+                mean of ", output.data[1,3], "and a sd of ", output.data[1,4], "."))
+    }
     
     
     # Specify benchmark density

@@ -152,9 +152,9 @@ DAC.normal <- function(from, to, by, data, priors, mean.bench, sd.bench, n.iter 
     KL.experts[i,2] <- KL.experts[i,1]/KL.bench
   }
   
-  out <- list(output.data = output.data, KL.DAC = KL.experts)
+  out <- list(output.data = output.data, KL.DAC = KL.experts, KL.bench = KL.bench)
   
-  print(KL.experts)
+  print(list(KL.experts=KL.experts, KL.bench = KL.bench))
   
   # Return output
   return(out)
