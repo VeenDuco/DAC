@@ -119,7 +119,7 @@ DAC.normal <- function(from, to, by, data, priors, mean.bench, sd.bench, n.iter 
   if(round(integrate.xy(x = seq(from = from,  to = to, by = by), fx = post), 2) != 1){
     stop(paste0("The posterior distribution from the benchmark and the data is not propper in the sense that it does not integrate to one over
            the defined parameter space. You can use the integrate.xy function of the sfsmisc package to check this. The posterior has a
-                mean of ", output[1,3], "and a sd of ", output[1,4], "."))
+                mean of ", output.data[1,3], "and a sd of ", output.data[1,4], "."))
   }
   
   
