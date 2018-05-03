@@ -152,6 +152,11 @@ DAC.normal <- function(from, to, by, data, priors, mean.bench, sd.bench, n.iter 
     KL.experts[i,2] <- KL.experts[i,1]/KL.bench
   }
   
+  if(anyNA(KL.experts)==TRUE){
+    warning("Some Kullback-Leibler Divergences could not be calculated. Check to see if the relevant distributions 
+            and the posterior distribution have any overlap at all.")
+  }
+  
   out <- list(output.data = output.data, KL.DAC = KL.experts, KL.bench = KL.bench)
   
   print(list(KL.experts=KL.experts, KL.bench = KL.bench))
