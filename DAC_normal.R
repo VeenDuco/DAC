@@ -72,7 +72,9 @@ DAC.normal <- function(from, to, by, data, priors, mean.bench, sd.bench, n.iter 
   # Posterior calculation with blavaan
   
   # Defining the uniform prior for blavaan
-  prior <- paste("dnorm(",mean.bench,",",sd.bench,")") 
+  
+  precision <- 1/(sd.bench^2) # Translate bench sd into precision 
+  prior <- paste("dnorm(",mean.bench,",",precision,")") 
   
   get.posterior <- function(data, prior){ 
     # Creating a matrix of the data with column name y by which the model specified below is generally applicable for different datasets.
