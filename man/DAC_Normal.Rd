@@ -1,11 +1,11 @@
-\name{DAC.uniform}
-\alias{DAC.uniform}
-\title{DAC For Uniform Benchmark Prior And Expert Priors}
+\name{DAC.normal}
+\alias{DAC.normal}
+\title{DAC For Normal Benchmark Prior And Expert Priors}
 \usage{
-DAC.uniform(from, to, by, data, priors, lb.bench, ub.bench, n.iter = 10000)
+DAC.normal(from, to, by, data, priors, mean.bench, sd.bench, n.iter = 10000)
 }
 \description{
-Calculates DAC values for multiple experts that provide prections in the form of a prior. The benchmark is set to be a uniform distribution with user specified boundaries.
+Calculates DAC values for multiple experts that provide prections in the form of a prior. The benchmark is set to be a normal distribution with user specified boundaries.
 }
 
 \arguments{
@@ -18,8 +18,8 @@ is equal to the parameter space that is supplied using the from, to, by statemen
 runs from -10 to 10 in steps of 0.01 than your density of a standard normal distribution should be obtained
 using dnorm(x = seq(from = -10, to = 10, by = 0.01), mean = 0, sd = 1). The first column will thus describe this
 density using 2001 rows and all other columns should use the same density mapping to the parameter space.}
-\item{lb.bench}{Lower boundary of the benchmark prior.}
-\item{ub.bench}{Upper boundary of the benchmark prior.}
+\item{mean.bench}{Mean of the benchmark prior.}
+\item{sd.bench}{SD of the benchmark prior.}
 \item{n.iter}{The number of iterations that is used to obtain the posterior distribution of the data and the benchmark prior
 note that only half of these iterations will be used to obtain samples, the other half is used for adaptation and
 burnin.}
@@ -36,7 +36,4 @@ Veen, D., Stoel, D., Schalken, N., van de Schoot, R. (2017). Using the Data Agre
 \examples{
 
 
-out <- DAC_Uniform(data=Turnover$actual.data,bench.min = 0,bench.max = 5,
-                   experts = Turnover$expert.priors,lb.area = 0,ub.area = 5,step=.01)
-out
 }
