@@ -111,7 +111,7 @@ DAC.normal <- function(from, to, by, data, priors, mean.bench, sd.bench, n.iter 
   x.axis <- seq(from = from, to=to, by = by)
   
   # Specify posterior density 
-  post <- dnorm(x.axis, output[1,3], output[1,4])
+  post <- dnorm(x.axis, output.data[1,3], output.data[1,4])
   
   #density(hierdechainssamengevoegd, n = length( seq(from = from, to = to, by = by) ), from = from, to = to)
   
