@@ -43,8 +43,8 @@ priors <- matrix(NA,ncol=4,nrow=length(xx))
 for(i in 1:4){
   priors[,i] <- dnorm(xx, Turnover$expert.priors[i ,1], Turnover$expert.priors[i, 2])
 }
-out <- DAC.uniform(from = from, to = to, by = by, data = Turnover$actual.data, 
-                   priors = priors ,mean.bench = 0, sd.bench = 100, n.iter = 4000)
+out <- DAC::DAC.normal(from = from, to = to, by = by, data = Turnover$actual.data, 
+                   priors = priors ,mean.bench = 0, sd.bench = 100)
 out
 
 

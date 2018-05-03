@@ -1,6 +1,7 @@
 importFrom("flexmix", "KLdiv")
 importFrom("blavaan", "blavaan", "dpriors", "blavInspect")
 importFrom("utils", "capture.output")
-importFrom("stats", "runif", "dnorm","dunif", "rnorm", "sd")
+importFrom("stats", "dnorm","dunif", "sd")
 importFrom("truncnorm", "dtruncnorm")
 importFrom("sfsmisc", "integrate.xy")
+exportPattern("^[[:alpha:]]+")

@@ -12,9 +12,6 @@
 # In this specific function we calculate the DAC whilst using a Normal benchmark prior. 
 
 # loading required packages
-library(blavaan)
-library(flexmix)
-library(sfsmisc)
 
 # Function defenitions
 # Function to calculate the DAC for a 2 parameter model mean / sd. 

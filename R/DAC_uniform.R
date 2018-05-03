@@ -12,10 +12,7 @@
 # In this specific function we calculate the DAC whilst using a Uniform benchmark prior. 
 
 # loading required packages
-library(blavaan)
-library(flexmix)
-library(sfsmisc)
-library(truncnorm)
+
 
 # Function definitions
 # Function to calculate the DAC for a 2 parameter model mean / sd. 
