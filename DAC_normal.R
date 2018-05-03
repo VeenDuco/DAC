@@ -18,7 +18,7 @@ library(sfsmisc)
 
 # Function defenitions
 # Function to calculate the DAC for a 2 parameter model mean / sd. 
-DAC.normal <- function (from, to, by, data, priors, mean.bench, sd.bench, n.itter = 10000) {
+DAC.normal <- function(from, to, by, data, priors, mean.bench, sd.bench, n.iter = 10000) {
   #
   # Args:
   #          from: Lower bound of the parameter space that is to be evaluated, as in the seq function of the base package
@@ -32,7 +32,7 @@ DAC.normal <- function (from, to, by, data, priors, mean.bench, sd.bench, n.itte
   #                density using 2001 rows and all other columns should use the same density mapping to the parameter space.
   #    mean.bench: Mean of the benchmark prior.
   #      sd.bench: sd of the benchmark prior.
-  #       n.itter: The number of itterations that is used to obtain the posterior distribution of the data and the benchmark prior
+  #       n.iter: The number of itterations that is used to obtain the posterior distribution of the data and the benchmark prior
   #                note that only half of these itterations will be used to obtain samples, the other half is used for adaptation and
   #                burnin.
   #
@@ -58,5 +58,96 @@ DAC.normal <- function (from, to, by, data, priors, mean.bench, sd.bench, n.itte
          the defined parameter space. You can use the integrate.xy function of the sfsmisc package to check this.")
   }
   
+  # Create space to store the results 
+  
+  output.data <- matrix(NA, nrow=1, ncol=6)
+  colnames(output.data) <- c("Sample mean", "Sample SE", "Posterior mean", "Posterior SD", "Abs. mean diff", "Abs. SD diff") 
+  
+  # Sample mean en SE of mean
+  output.data[1,1] <- mean(data)
+  output.data[1,2] <- sd(data)/sqrt(length(data))
+  
+  #-----------------------------------------------------------------
+  
+  # Posterior calculation with blavaan
+  
+  # Defining the uniform prior for blavaan
+  prior <- paste("dnorm(",mean.bench,",",sd.bench,")") 
+  
+  get.posterior <- function(data, prior){ 
+    # Creating a matrix of the data with column name y by which the model specified below is generally applicable for different datasets.
+    data <- as.matrix(data)
+    colnames(data) <- c("y")
+    
+    #Defining the model, which is an intercept only model in case of the mean 
+    model <- '#Intercept
+    y ~ 1 
+    
+    #variance
+    y ~~ prior("dgamma(1, 1)")*y
+    '
+    
+    fit.model <- blavaan(model, data=data, n.chains = 2, burnin = n.iter/2, sample = n.iter, adapt=n.iter/2, dp=dpriors(nu=prior))
+    return(fit.model)
+  }
+  
+  #surpress blavaan output during DAC_Uniform run
+  capture.output(output.blavaan <- get.posterior(data, prior))
+  
+  #Save posterior mean and posterior sd of the mean
+  output.data[1,3] <- as.numeric(blavInspect(output.blavaan, what="postmean")[1])
+  output.data[1,4] <- as.numeric(blavInspect(output.blavaan, what="se")$nu)
+  
+  #Save the absolute difference between sample and posterior estimates
+  output.data[1,5] <- abs(output.data[1,3] - output.data[1,1])
+  output.data[1,6] <- abs(output.data[1,4] - output.data[1,2])
+  
+  #------------------------------------------------------------------
+  # Kullback-Leibler calculation 
+  
+  # Set range of x-axis 
+  x.axis <- seq(from = from, to=to, by = by)
+  
+  # Specify posterior density 
+  post <- dnorm(x.axis, output[1,3], output[1,4])
+  
+  #density(hierdechainssamengevoegd, n = length( seq(from = from, to = to, by = by) ), from = from, to = to)
+  
+  
+  # Specify benchmark density
+  benchmark <- dnorm(x.axis, mean.bench, sd.bench)
+  
+  #Creating a matrix of the posterior and benchprior for the use of the KL D function
+  matrix1 <- cbind(post, benchmark)
+  
+  #Kullback-Leibler Divergence for posterior and benchmark prior
+  KL.bench <- KLdiv(matrix1, method= c("continuous"), eps=10^-250)[1,2]
+  
+  
+  # Priors 
+  # Matrix with posterior density, and expert densities
+  matrix2 <- cbind(post, priors)
+  
+  KL.experts <- matrix(NA, nrow=ncol(priors), ncol=2)
+  colnames(KL.experts) <- c("KL expert", "DAC")
+  
+  
+  for(i in 1:ncol(priors)){
+    KL.experts[i,1] <- KLdiv(cbind(matrix2[,1],matrix2[,i+1]),method= c("continuous"), eps=10^-250)[1,2]
+    # get KL divergence between posterior (column 1 of matrix 2) for each expert (expert 1 = column 2 in matrx 2 etc.)
+  }
+  
+  
+  # DAC scores for each expert 
+  for(i in 1:ncol(priors)){
+    KL.experts[i,2] <- KL.experts[i,1]/KL.bench
+  }
+  
+  out <- list(output.data = output.data, KL.DAC = KL.experts)
+  
+  print(KL.experts)
+  
+  # Return output
+  return(out)
   
 } # end function
