@@ -13,6 +13,8 @@
 
 # loading required packages
 
+#' @export # to export function
+
 # Function defenitions
 # Function to calculate the DAC for a 2 parameter model mean / sd. 
 DAC.normal <- function(from, to, by, data, priors, mean.bench, sd.bench, n.iter = 10000) {

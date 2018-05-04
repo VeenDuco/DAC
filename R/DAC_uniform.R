@@ -13,6 +13,8 @@
 
 # loading required packages
 
+#' @export # to export function
+
 
 # Function definitions
 # Function to calculate the DAC for a 2 parameter model mean / sd. 

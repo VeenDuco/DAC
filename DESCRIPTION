@@ -12,7 +12,7 @@ Authors@R: c(person(given = "Duco", family = "Veen",
                     role  = c("aut"),
                     email = "a.g.j.vandeschoot@uu.nl")      
             )
-Author: Duco Veen [aut, cre], Naomi Schalken [aut, cre], Rens van de Schoot [aut]
+Author: Duco Veen [aut, cre], Naomi Schalken [aut], Rens van de Schoot [aut]
 Maintainer: Duco Veen <ducoveen@gmail.com>
 Description: Allows to calculate Data Agreement Criterion (DAC) scores. This can be done to determine prior-data conflict or to evaluate and compare multiple priors, which can be experts' predictions. Bousquet (2008) <doi.org/10.1080/02664760802192981>.
 License: GPL-3
