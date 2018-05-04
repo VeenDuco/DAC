@@ -47,7 +47,5 @@ for(i in 1:4){
 out <- DAC.normal(from = from, to = to, by = by, data = Turnover$actual.data, 
                    priors = priors ,mean.bench = 0, sd.bench = 100, n.iter = 1000)
 }
-out
-
 
 }

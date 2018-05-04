@@ -47,5 +47,4 @@ for(i in 1:4){
 out <- DAC.uniform(from = from, to = to, by = by, data = Turnover$actual.data, 
                    priors = priors ,lb.bench = 0, ub.bench = 5, n.iter = 1000)
 }
-out
 }
